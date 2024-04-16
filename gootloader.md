@@ -37,7 +37,7 @@ Summarising what each of the four function does:
 * qqxhouk - Concatenates a number of variables and saves result into variable ndplk. It saves a pointer to function threel in travel8[5663673]
 * threel - Processes ndplk and saves result into variable txeic. It saves a pointer to function water8 in travel8[6003902]
 * water8 - It saves a pointer to function rain4 to travel8[6075237]. Saves a pointer to qqxhouk in txeic[3].
-* rain4 - Calls txeic[3]\(txeic[1])(travel8); 
+* rain4 - Calls txeic[3](txeic[1])(travel8); 
 
 ndplk is actually an encrypted script. It is decrypted by the meeth0 (a pointer to meeth0 is saved in the variable flower7) function and is saved in the 
 variable txeic:
