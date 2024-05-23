@@ -319,4 +319,4 @@ To summarise the functionality of the script above:
 1. One of the URLs is randomly selected
 2. A cookie header is populated with compressed encoded fingerprint data of the infected machine
 3. A HTTPS request with the cookie header is made to the URL
-4. Response is used to execute shell code
+4. Response is used to execute run powershell commands
