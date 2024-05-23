@@ -6,7 +6,9 @@ layout: post
 
 # De-obfuscating a Gootloader sample
 
-This post details the steps taken to de-obfuscate a Gootloader script.
+This post details the steps taken to de-obfuscate a Gootloader script. The malicious script was extracted from what seemed like combined legitimate xlsx.js and shim.js script from sheetjs.com. I will not be uploading the full script here but only the extracted malicious code from the script.
+
+The extracted code can be found [here](./assets/files/gootloader/gootloader.script)
 
 ## First Layer
 
@@ -37,7 +39,7 @@ Summarising what each of the four function does:
 * qqxhouk - Concatenates a number of variables and saves result into variable ndplk. It saves a pointer to function threel in travel8[5663673]
 * threel - Processes ndplk and saves result into variable txeic. It saves a pointer to function water8 in travel8[6003902]
 * water8 - It saves a pointer to function rain4 to travel8[6075237]. Saves a pointer to qqxhouk in txeic[3].
-* rain4 - Calls txeic[3](txeic[1])(travel8); 
+* rain4 - Calls txeic[3]\(txeic[1])(travel8); 
 
 ndplk is actually an encrypted script. It is decrypted by the meeth0 (a pointer to meeth0 is saved in the variable flower7) function and is saved in the 
 variable txeic:
