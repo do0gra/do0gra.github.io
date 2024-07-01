@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Malware Analysis
+# Malware Sample Analysis Walkthrough
 
 [De-obfuscating a Gootloader sample](./gootloader.html)
 
