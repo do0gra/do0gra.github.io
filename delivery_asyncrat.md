@@ -140,6 +140,7 @@ PE detective shows the binary as a .NET file, now we can decompile it using a .N
 ![ss18_1](/assets/images/delivery_async/ss18_1.png)
 
 ![ss18](/assets/images/delivery_async/ss18.png)
+
 "etape 1 passed lol" translates to "step 1 passed lol"
 The function loads another binary data that is read from the subkey 'r', and proceeds to call the function 'o' in the 'o' namespace. Herein, we shall name this as stage1.
 
