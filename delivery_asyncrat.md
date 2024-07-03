@@ -90,10 +90,12 @@ It is revealed here that the hexadecimal value defined in the function is a hexa
 We can confirm the above by executing the vbs script in a virtual machine.
 
 Registry Entries
+
 ![ss11](/assets/images/delivery_async/ss11.png)
 ![ss12](/assets/images/delivery_async/ss12.png)
 
 Scheduled Task Creation
+
 ![ss12_1](/assets/images/delivery_async/ss12_1.png)
 ![ss12_2](/assets/images/delivery_async/ss12_2.png)
 
@@ -118,6 +120,7 @@ Read the value from registry subkey "v" (created by VBS script), passes to the p
 ``` 
 
 After that, the string "Stop-Process -Name conhost -Force" is passed to the powershell process and enters. 
+
 ![ss16](/assets/images/delivery_async/ss16.png)
 
 Notice that the powershell "loads" the base64-decoded reversed value from the 's' subkey (One of the hexadecimal strings defined in VBS script). It then calls a function in 'a'. But what is 'a'? The next step would be to dump out the data that was loaded for analysis.
@@ -131,6 +134,7 @@ The decoded "s" binary data can be extracted out by following the operation perf
 ![ss17](/assets/images/delivery_async/ss17.png)
 
 PE detective shows the binary as a .NET file, now we can decompile it using a .NET decompiler (eg. dnSpy) and examine the source code. We now know that the powershell script actually calls the 'a' function from the 'a' namespace after loading it, passing a string '650594173'.
+
 ![ss18_1](/assets/images/delivery_async/ss18_1.png)
 
 ![ss18](/assets/images/delivery_async/ss18.png)
@@ -143,33 +147,41 @@ Drawing experience from analysis of "s" binary data, the decoded "r" binary data
 ![ss19](/assets/images/delivery_async/ss19.png)
 
 Function 'o' defined here. Checks for the .NET version present, taking the latest version (v4.0) if multiple versions exist and finds the "AddInProcess.exe" in the .NET folder. The function EPP.EP is a call to perform in-memory loading and running of PE executable files. So zooming in the parameters of the function call, we have the process path of 'AddInProcess32.exe' from the .NET folder and 'bytes' returned by a function 'GetBytes' which is left unknown.
+
 ![ss20](/assets/images/delivery_async/ss20.png)
 
 Function 'GetBytes' retrieve data from the 'segments' key, concatenates the 'segment' subkey and returns the result. 
+
 ![ss21](/assets/images/delivery_async/ss21.png)
 
 Data from 'segments' key in the registry as shown here.
+
 ![ss22](/assets/images/delivery_async/ss22.png)
 
 Concatenating the segment data gives the PE executable that is loaded.
 
 ## Last Steps
 Decompiling this shows signs of a RAT tool. 
+
 ![ss23](/assets/images/delivery_async/ss23.png)
 
 Googling the name "Async RAT", the first result brought my attention.
 https://github.com/NYAN-x-CAT/AsyncRAT-C-Sharp/tree/master
 
 The folder structure in the github repository matches the decompiled structure.
+
 ![ss23_1](/assets/images/delivery_async/ss23_1.png)
 
 The configured settings are AES decrypted during runtime.
+
 ![ss24](/assets/images/delivery_async/ss24.png)
 
 The encrypted settings from the sample.
+
 ![ss25](/assets/images/delivery_async/ss25.png)
 
 The default settings as it appear in the repository
+
 ![ss26](/assets/images/delivery_async/ss26.png)
 
 This AsyncRAT sample can also be found on [VirusTotal](https://www.virustotal.com/gui/file/760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe) SHA1:760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe
