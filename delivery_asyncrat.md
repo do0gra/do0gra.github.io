@@ -172,6 +172,3 @@ The default settings as it appear in the repository
 ![ss26](/assets/images/delivery_async/ss26.png)
 
 This AsyncRAT sample can also be found on [VirusTotal](https://www.virustotal.com/gui/file/760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe) SHA1:760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe
-
-
-
