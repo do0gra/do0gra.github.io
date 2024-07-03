@@ -90,7 +90,7 @@ It is revealed here that the hexadecimal value defined in the function is a hexa
 We can confirm the above by executing the vbs script in a virtual machine.
 
 Registry Entries
-
+<br>
 ![ss11](/assets/images/delivery_async/ss11.png)
 ![ss12](/assets/images/delivery_async/ss12.png)
 
@@ -109,9 +109,11 @@ Entry point with first function call. Reads value from registry subkey "i" that 
 ![ss13](/assets/images/delivery_async/ss13.png)
 
 Uses WMI to check if process "AddInProcess32.exe" is running. Returns true if running, otherwise, false.
+
 ![ss14](/assets/images/delivery_async/ss14.png)
 
 Executes Powershell, searches for the powershell process before calling the next function "envoyerCommandesPourArreterConhost"
+
 ![ss15](/assets/images/delivery_async/ss15.png)
 
 Read the value from registry subkey "v" (created by VBS script), passes to the powershell process, enters and sleeps. The "v" value contains powershell commands the powershell command 
@@ -120,7 +122,7 @@ Read the value from registry subkey "v" (created by VBS script), passes to the p
 ``` 
 
 After that, the string "Stop-Process -Name conhost -Force" is passed to the powershell process and enters. 
-
+ <br>
 ![ss16](/assets/images/delivery_async/ss16.png)
 
 Notice that the powershell "loads" the base64-decoded reversed value from the 's' subkey (One of the hexadecimal strings defined in VBS script). It then calls a function in 'a'. But what is 'a'? The next step would be to dump out the data that was loaded for analysis.
@@ -162,7 +164,7 @@ Concatenating the segment data gives the PE executable that is loaded.
 
 ## Last Steps
 Decompiling this shows signs of a RAT tool. 
-
+ <br>
 ![ss23](/assets/images/delivery_async/ss23.png)
 
 Googling the name "Async RAT", the first result brought my attention.
@@ -181,7 +183,7 @@ The encrypted settings from the sample.
 ![ss25](/assets/images/delivery_async/ss25.png)
 
 The default settings as it appear in the repository
-
+ <br>
 ![ss26](/assets/images/delivery_async/ss26.png)
 
 This AsyncRAT sample can also be found on [VirusTotal](https://www.virustotal.com/gui/file/760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe) SHA1:760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe
