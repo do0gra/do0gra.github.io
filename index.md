@@ -8,7 +8,7 @@ layout: default
 
 [Analysing an AutoIT malware](./autoitmalware.html)
 
-[Delivery stages of an AsyncRAT](./delivery_asyncrat.html)
+[Delivery and installation of a AsyncRAT](./delivery_asyncrat.html)
 
 # Automation
 
