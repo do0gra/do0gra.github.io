@@ -10,6 +10,8 @@ layout: default
 
 [Delivery and installation of a AsyncRAT](./delivery_asyncrat.html)
 
+[DBATLoader delivering agent Tesla](./_site/abatload_agenttesla.html)
+
 # Automation
 
 [Automating the detection and de-obfuscation of Javascript-based malware](./js_malware_detection.html)
