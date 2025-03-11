@@ -4,7 +4,7 @@ layout: post
 
 [back](./)
 
-# Delivery and installation of a AsyncRAT 
+# DBatloader delivering Agent Tesla
 
 While reading up on malware news, I came across this post by asec: https://asec.ahnlab.com/en/85834/ that describes a campaign involving distribution of a malware using batch files packaged into a MS CAB file. This malware was known as DBATLoader and the CAB file header it was packaged in was modified to bypass security controls.
 
@@ -12,6 +12,7 @@ I'll be analysing one such sample on Virustotal: https://www.virustotal.com/gui/
 
 ## Analysis of CMD file
 Using 7-zip to open the CAB file, a CMD file, a png file and a text file is packaged in. The text file contains nothing of interests and the png file appears to be an invoice which is used to provide legitimacy to the package. 
+
 ![invoice](/assets/images/dbat_tesla/invoice.png)
 
 The CMD file appears to be the click bait for the victim, so I'll start the analysis from there. On first glance, its pretty clear the CMD file is heavily obfuscated.
