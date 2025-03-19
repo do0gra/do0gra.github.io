@@ -10,7 +10,7 @@ layout: default
 
 [Delivery and installation of a AsyncRAT](./delivery_asyncrat.html)
 
-[DBATLoader delivering agent Tesla](./abatload_agenttesla.html)
+[DBATLoader delivering agent Tesla](./dbatload_agenttesla.html)
 
 # Automation
 
