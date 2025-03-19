@@ -312,43 +312,57 @@ While doing some research on the obfuscation pattern, I came across this post: h
 In part 2, Ryan Weil has written an excellent article on how to automate the deobfuscation of https://ryan-weil.github.io/posts/AGENT-TESLA-2/ by adding a deobfuscator class to de4dot. 
 
 The deobfuscated .NET looks much for readable.
+
 ![pe3_1](/assets/images/dbat_tesla/pe3_1.png)
 
 The function where everything starts. It does a few things including capability to key log and screen log.
+
 ![pe3_2](/assets/images/dbat_tesla/pe3_2.png)
 
 The configuration of the payload.
+
 ![pe3_3](/assets/images/dbat_tesla/pe3_3.png)
 
 Exfiltration is via the FtpHost using the Ftp credentials.
+
 ![pe3_4](/assets/images/dbat_tesla/pe3_4.png)
 
 Retrieves the IP address of the machine via a call to the IP URL.
+
 ![pe3_5](/assets/images/dbat_tesla/pe3_5.png)
 
 The computer's info is concatenated with a string blob that is constructed before exfiltration to the ftphost.
+
 ![pe3_6](/assets/images/dbat_tesla/pe3_6.png)
 
 List of methods that makes up the construction of the string blob.
+
 ![pe3_7](/assets/images/dbat_tesla/pe3_7.png)
 
 Examining some of the methods show stealing of credentials / sensitive information.
+
 ![pe3_8](/assets/images/dbat_tesla/pe3_8.png)
 
 Stealing VNC credentials.
+
 ![pe3_9](/assets/images/dbat_tesla/pe3_9.png)
 
 Safari browser.
+
 ![pe3_10](/assets/images/dbat_tesla/pe3_10.png)
 
 The information are stitched together with the computer's information and exfiltrated to the ftphost.
+
 ![pe3_11](/assets/images/dbat_tesla/pe3_11.png)
 
 The keys logged to log.tmp in the temp directory and concatenated with the computer's information and exfiltrated to the ftp host.
+
 ![pe3_12](/assets/images/dbat_tesla/pe3_12.png)
 
 Screen logged exists in memory and is converted to array before exfiltration to ftp host.
+
 ![pe3_13](/assets/images/dbat_tesla/pe3_13.png)
 
 Idan Malihi has done research on a different sample. The sample exfiltrates data using SMTP instead of FTP.
+
 https://idanmalihi.com/dissecting-agent-tesla-unveiling-threat-vectors-and-defense-mechanisms/
