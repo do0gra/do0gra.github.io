@@ -12,6 +12,8 @@ layout: default
 
 [DBATLoader delivering agent Tesla](./dbatload_agenttesla.html)
 
+[Deobfuscating Adwind] (./deobfuscating_adwind.html)
+
 # Automation
 
 [Automating the detection and de-obfuscation of Javascript-based malware](./js_malware_detection.html)
