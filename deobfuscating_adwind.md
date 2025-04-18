@@ -63,7 +63,18 @@ Specific code exists for different OS, the one below shows a function calling ws
 Function calls relating to windows registry.
 ![deobf_10](/assets/images/adwind/deobf_10.png)
 
+# Deobfuscating the strings in the final payload
+
+Researching on the different obfuscation technique used by Adwind, I came across this blog which seem to show the same kind of obfuscation technique used https://blogs.jpcert.or.jp/en/2016/05/decoding-obfuscated-strings-in-adwind.html
+
+It is also explained that Adwind is typically packed and that its main jar is hidden in the artefacts jar file, which appears to be the same for this sample.
+
+I used the tool provided in the blog https://github.com/JPCERTCC/aa-tools and successfully deobfuscated the strings.
+![deobf_11](/assets/images/adwind/deobf_11.png)
+
+![deobf_12](/assets/images/adwind/deobf_12.png)
+
 # Final thoughts
 Theres more work to be done, however, I'm just going to stop here. Next steps would include
-- Deobfuscating the final payload
+- Continue analysing the functionality of the final payload (less complicated with the deobfuscated strings)
 - Figuring out how the "privatekey" is used
