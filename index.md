@@ -4,7 +4,7 @@ layout: default
 
 # Malware Sample Analysis Walkthrough
 
-[De-obfuscating a Gootloader sample](./gootloader.html)
+[De-obfuscating a Gootloader Script](./gootloader.html)
 
 [Analysing an AutoIT malware](./autoitmalware.html)
 
