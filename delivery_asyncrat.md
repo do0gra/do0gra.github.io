@@ -5,38 +5,37 @@ layout: post
 [back](./)
 
 # Delivery and installation of a AsyncRAT 
+In this post, we analyze a multi-stage malware delivery chain that begins with a malicious HTML file and ultimately leads to the deployment of **AsyncRAT**, a known remote access trojan. We’ll break down each stage—from initial lure to final payload execution—and demonstrate how script-based loaders are used to bypass detection mechanisms.
 
-In this blog post, I demonstrate how I analyse a html file and understand how a AsyncRAT tool would be loaded from it.
+Source: [VirusTotal](https://www.virustotal.com/gui/file/8e872d7047689c2e6a3880f6a3f4627544148f43e4aa5e167c1d518c4beb9c3a)
+SHA1:b37d96bf1552affcdf367641fb2b541f34cc26a1
 
-The sample can be obtained from [VirusTotal](https://www.virustotal.com/gui/file/8e872d7047689c2e6a3880f6a3f4627544148f43e4aa5e167c1d518c4beb9c3a). SHA1:b37d96bf1552affcdf367641fb2b541f34cc26a1
 
-## Analysis of HTML file
+## Stage 1: HTML Dropper Analysis
 
-Opening up the HTML file shows a prompt for a password. Most of the messages are in French. Keying in any string and clicking on the button downloads a file named "Avis de paiement.PDF.zip". The bytes of the file differs for different strings as the password, with the "right" password producing a zip file as inferred by the output file name.
+Opening the HTML reveals a password prompt (in French). Entering a string and clicking the button triggers a file download named `Avis de paiement.PDF.zip`. Each input results in different file bytes, suggesting that the correct password dynamically decrypts or generates a valid ZIP file.
 
 ![ss1](/assets/images/delivery_async/ss1.png)
 
-Examining the source code of the HTML, theres a large blob of data that seems to be base64 encoded and also hinted by the variable name. 
+Inspecting the HTML source reveals a large base64-encoded blob, likely representing encrypted data.
 
 ![ss2](/assets/images/delivery_async/ss2.png)
 
-The next part shows that the base64 data is decoded and AES decrypted via function calls in the CryptoJS library before finally writing out to the file "Avis de paiement.PDF.zip".
+This blob is then base64-decoded and AES-decrypted using `CryptoJS` functions, after which the output is written as `Avis de paiement.PDF.zip`.
 
 ![ss3](/assets/images/delivery_async/ss3.png)
 
-The right zip file contains a vbs script, which will be analysed next.
+The decrypted ZIP archive contains a VBS script—the next component in the infection chain.
 
-## Analysis of VBS script
+## Stage 2: VBS Script Analysis
 
-There are comments written in french, perhaps translating these to english makes it easier for us to understand the functionality of the script.
+The VBS script contains French comments and multiple large hexadecimal strings. Translating the comments helps clarify the script’s behavior.
 
-Before translation:
+**Original** vs. **Translated**:
 ![ss4_1](/assets/images/delivery_async/ss4_1.png)
-
-After translation:
 ![ss4_2](/assets/images/delivery_async/ss4_2.png)
 
-A number of large hexadecimal strings are found in the script. 
+Hexadecimal values embedded in the script represent binary content to be written or decoded at runtime.
 
 ![ss5](/assets/images/delivery_async/ss5.png)
 
@@ -44,53 +43,47 @@ A number of large hexadecimal strings are found in the script.
 
 Intuitively, these hexadecimal values seem to binary data. To find out how the hexadecimal values are used, we continue examining the rest of the script.
 
-The entry point is the call to the "Initialiser" function, which contain calls to two functions: "SaveInRegistry" and "CreateANdWriteFileScript"
+### Entry Point: `Initialiser` Function
+
+The `Initialiser` function orchestrates execution via two main subroutines:
+* `SaveInRegistry`
+* `CreateAndWriteFileScript`
 
 ![ss7](/assets/images/delivery_async/ss7.png)
 
-### SaveInRegistry Function
+### `SaveInRegistry` Function
 
 ![ss8](/assets/images/delivery_async/ss8.png)
 
-Zooming in functions called:
+Functions called:
 ![ss8_1](/assets/images/delivery_async/ss8_1.png)
 ![ss8_2](/assets/images/delivery_async/ss8_2.png)
 ![ss8_3](/assets/images/delivery_async/ss8_3.png)
 
-From the comments and function name, we roughly understand that this function saves values to the registry. A detailed description below - 
-Writes the following data to the respective subkeys:
-* Contents of dataRegister to subkey "v"
-* 0 to subkey "b" 
-* "650594173" to subkey "path"
-* "AddInProcess32.exe" to subkey "i"
-* Reverses one of the hexadecimal values defined earlier, breaks it into segments and save into "Software\\650594173\\Segments"
-* Depending on .NET framework version detected, writes to subkey "r" and "s" hexdecimal values defined earlier
+This function writes multiple values to the registry:
+* Contents of `dataRegister` to subkey `v`
+* The value `0` to subkey `b`
+* The string `650594173` to subkey `path`
+* The filename `AddInProcess32.exe` to subkey `i`
+* A reversed hex string, split into segments, saved under `Software\650594173\Segments`
+* Binary blobs from predefined hex values are written to `r` and `s`, depending on the .NET version installed
 
-At this point, we see how the hexadecimal values defined before are used here. Since we've know that these values are written to the registry.
-
-### CreateAndWriteFileScript Function
+### `CreateAndWriteFileScript` Function
 
 ![ss9](/assets/images/delivery_async/ss9.png)
 
-Zooming in functions called:
+Functions called:
 ![ss10](/assets/images/delivery_async/ss10.png)
 
-From the comments and function name, this function creates and writes to a script. A detailed description below - 
-* Creates a scheduled task with task name "650594173" and action pointing to "%UserProfile%\\650594173.js", to repeat action every 1 minute with starting time "2024-02-20T00:00:00"
-* If file exist, delete it
-* Writes the hexadecimal defined in the function and write to the location, "%UserProfile%\\650594173.js"
+This subroutine sets up persistence:
+* Creates a scheduled task named `650594173`, pointing to a JavaScript file located at `%UserProfile%\650594173.js`
+* Writes another embedded hexadecimal blob (representing JavaScript code) to that path
+* Schedules the task to run every minute starting `2024-02-20T00:00:00`
 
-It is revealed here that the hexadecimal value defined in the function is a hexadecimal representative of a javascript, which we will look at later.
-
-### Summary of VBS script
-
-1. Writes to registry a number of strings, including binary data encoded as hexadecimal values
-2. Creates a javascript and scheduled task that runs the script
-
-We can confirm the above by executing the vbs script in a virtual machine.
+**Confirmation**: Executing the VBS in a virtual machine shows successful registry entries and task creation.
 
 Registry Entries
-<br>
+
 ![ss11](/assets/images/delivery_async/ss11.png)
 ![ss12](/assets/images/delivery_async/ss12.png)
 
@@ -99,87 +92,88 @@ Scheduled Task Creation
 ![ss12_1](/assets/images/delivery_async/ss12_1.png)
 ![ss12_2](/assets/images/delivery_async/ss12_2.png)
 
-## Analysis of Javascript
 
-Moving on to the javascript that was created "650594173.js", notice that the comments, function and variable names are also written in french. The functionality of the script can be understood by looking at keywords. 
+## Stage 3: JavaScript Loader Analysis
 
-Tracing the execution flow of the script:
+The JavaScript file `650594173.js` also contains French variable names and comments. By tracing key operations, we reconstruct its logic:
+1. Reads the `i` registry key (`AddInProcess32.exe`) and checks if the process is running via WMI.
+2. If not running, launches PowerShell and passes commands to decode and load a payload from registry.
 
-Entry point with first function call. Reads value from registry subkey "i" that was created by VBS script and passes this in to "verifierProcessus" function. This value was the string "AddInProcess32.exe".
 ![ss13](/assets/images/delivery_async/ss13.png)
-
-Uses WMI to check if process "AddInProcess32.exe" is running. Returns true if running, otherwise, false.
 <br>
 ![ss14](/assets/images/delivery_async/ss14.png)
 
-Executes Powershell, searches for the powershell process before calling the next function "envoyerCommandesPourArreterConhost"
+Executes Powershell, searches for the powershell process before calling the next function `envoyerCommandesPourArreterConhost`
 <br>
 ![ss15](/assets/images/delivery_async/ss15.png)
 
-Read the value from registry subkey "v" (created by VBS script), passes to the powershell process, enters and sleeps. The "v" value contains powershell commands the powershell command 
+Read the value from registry subkey `v` (created by VBS script), passes to the powershell process, enters and sleeps. The `v` value contains powershell commands the powershell command 
 ```ps
 {[}AppDomain{]}::CurrentDomain.Load{(}[Convert{]}::FromBase64String{(}{(}-join {(}Get-ItemProperty -LiteralPath 'HKCU:\Software\650594173' -Name 's'{)}.s | ForEach-Object {$_{[}-1..-{(}$_.Length{)}{]}}{)}{)}{)}; {[}a.a{]}::a{(}'650594173'{)}".
 ``` 
 
-After that, the string "Stop-Process -Name conhost -Force" is passed to the powershell process and enters. 
+After that, the string `Stop-Process -Name conhost -Force` is passed to the powershell process and enters. 
 <br>
 ![ss16](/assets/images/delivery_async/ss16.png)
 
-Notice that the powershell "loads" the base64-decoded reversed value from the 's' subkey (One of the hexadecimal strings defined in VBS script). It then calls a function in 'a'. But what is 'a'? The next step would be to dump out the data that was loaded for analysis.
+The powerhsell pulls base64-encoded, reversed data from subkey `s`, decodes it, loads it as a .NET assembly, and calls a method `a.a::a("650594173")`.
 
-### Summary of Javascript
-The script checks if a "AddInProcess32.exe" process is running, if it is sleep for 10 seconds before checking again. Otherwise, run powershell with commands that decodes data from registry subkey 's' and loads the result in memory. Calls function 'a'.
 
-## Analysis of "s" Binary Data
-The decoded "s" binary data can be extracted out by following the operation performed in the powershell command. That is taking the value in the "s" registry subkey, reversing the value and base64 decode it. 
+## Stage 4: .NET Payload - Registry Subkey `s`
+
+Using the same PowerShell logic, we extract and reverse the `s` value from the registry, then base64-decode it to get a .NET binary.
 
 ![ss17](/assets/images/delivery_async/ss17.png)
 
-PE detective shows the binary as a .NET file, now we can decompile it using a .NET decompiler (eg. dnSpy) and examine the source code. We now know that the powershell script actually calls the 'a' function from the 'a' namespace after loading it, passing a string '650594173'.
+PE detective shows the binary as a .NET file, now we can decompile it using a .NET decompiler (eg. dnSpy) and examine the source code. We now know that the powershell script actually calls the `a` function from the `a` namespace after loading it, passing a string `650594173`.
 
 ![ss18_1](/assets/images/delivery_async/ss18_1.png)
 
 ![ss18](/assets/images/delivery_async/ss18.png)
 
 "etape 1 passed lol" translates to "step 1 passed lol"
-The function loads another binary data that is read from the subkey 'r', and proceeds to call the function 'o' in the 'o' namespace. Herein, we shall name this as stage1.
 
-## Analysis of "r" Binary Data
-Drawing experience from analysis of "s" binary data, the decoded "r" binary data can be obtained by following the operation taken in stage1 - Reverse the data in "r" subkey and convert from hexadecimal and save it as a file. Thowing this file into dnSpy reveals this to be another .NET binary.
+The method `a.a()` loading additional data from subkey `r` and invoking `o.o()` from a new assembly.
+
+
+## Stage 5: .NET Payload - Registry Subkey `r`
+
+Repeating the decoding process for `r`, we retrieve another .NET binary.
 
 ![ss19](/assets/images/delivery_async/ss19.png)
 
-Function 'o' defined here. Checks for the .NET version present, taking the latest version (v4.0) if multiple versions exist and finds the "AddInProcess.exe" in the .NET folder. The function EPP.EP is a call to perform in-memory loading and running of PE executable files. So zooming in the parameters of the function call, we have the process path of 'AddInProcess32.exe' from the .NET folder and 'bytes' returned by a function 'GetBytes' which is left unknown.
-
 ![ss20](/assets/images/delivery_async/ss20.png)
 
-Function 'GetBytes' retrieve data from the 'segments' key, concatenates the 'segment' subkey and returns the result. 
+Function `GetBytes` retrieve data from the `segments` key, concatenates the `segment` subkey and returns the result. 
 
 ![ss21](/assets/images/delivery_async/ss21.png)
 
-Data from 'segments' key in the registry as shown here.
+Data from `segments` key in the registry as shown here.
 
 ![ss22](/assets/images/delivery_async/ss22.png)
 
-Concatenating the segment data gives the PE executable that is loaded.
+Within this next-stage payload:
+* The script identifies the highest available .NET version.
+* Locates `AddInProcess32.exe` in the .NET directory.
+* Uses `EPP.EP()` to inject and execute a PE file in-memory.
+* The executable bytes are retrieved from the `Segments` registry key by concatenating its subkeys.
 
-## Last Steps
-Decompiling this shows signs of a RAT tool. 
+
+## Final Stage: AsyncRAT Deployment
+
+Decompiling the injected PE reveals characteristics of **AsyncRAT**.
 <br>
 ![ss23](/assets/images/delivery_async/ss23.png)
 
-Googling the name "Async RAT", the first result brought my attention.
+A quick search confirms the match:  
 https://github.com/NYAN-x-CAT/AsyncRAT-C-Sharp/tree/master
 
-The folder structure in the github repository matches the decompiled structure.
+The source code and structure in the repository align with what we observed during reverse engineering.
 
 ![ss23_1](/assets/images/delivery_async/ss23_1.png)
 
-The configured settings are AES decrypted during runtime.
-
+The malware uses AES decryption at runtime to unpack its configuration.
 ![ss24](/assets/images/delivery_async/ss24.png)
-
-The encrypted settings from the sample.
 
 ![ss25](/assets/images/delivery_async/ss25.png)
 
@@ -187,4 +181,19 @@ The default settings as it appear in the repository
 <br>
 ![ss26](/assets/images/delivery_async/ss26.png)
 
-This AsyncRAT sample can also be found on [VirusTotal](https://www.virustotal.com/gui/file/760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe) SHA1:760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe
+Final Payload Hash:  
+**SHA1**: `760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe`  
+**Source**: [VirusTotal](https://www.virustotal.com/gui/file/760e4c092ea836527d7e87ab4cf5c1b9ff8c91672840d1365109da149a984efe)
+
+
+## Conclusion
+
+This AsyncRAT campaign employs a multi-layered delivery mechanism involving:
+
+1. **HTML Dropper** – Encrypted ZIP payload dynamically generated via AES and base64 decoding.
+2. **VBS Script Loader** – Writes registry entries, deploys a JavaScript loader, and sets up persistence.
+3. **JavaScript Loader** – Reads and decodes registry-stored binaries, invokes PowerShell.
+4. **In-Memory .NET Loaders** – Multi-stage binary execution from registry-encoded data.
+5. **Final Payload** – AsyncRAT executed via in-memory PE injection using native .NET components.
+
+The use of registry-stored payloads, obfuscated scripting languages, and native Windows tools highlights a highly evasive and modular malware deployment chain designed for stealth and persistence.
