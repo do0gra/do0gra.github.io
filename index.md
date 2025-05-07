@@ -12,7 +12,7 @@ layout: default
 
 [DBATLoader delivering agent Tesla](./dbatload_agenttesla.html)
 
-[Deobfuscating Adwind](./deobfuscating_adwind.html)
+[Inside Adwind: Deobfuscation and Payload Analysis](./deobfuscating_adwind.html)
 
 # Automation
 
