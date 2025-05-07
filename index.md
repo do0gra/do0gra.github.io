@@ -6,7 +6,7 @@ layout: default
 
 [De-obfuscating a Gootloader Script](./gootloader.html)
 
-[Analysing an AutoIT malware](./autoitmalware.html)
+[Dissecting an AutoIT Malware Sample](./autoitmalware.html)
 
 [Delivery and installation of a AsyncRAT](./delivery_asyncrat.html)
 
