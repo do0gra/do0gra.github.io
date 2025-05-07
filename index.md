@@ -16,4 +16,4 @@ layout: default
 
 # Automation
 
-[Automating the detection and de-obfuscation of Javascript-based malware](./js_malware_detection.html)
+[AST-Based Detection of JavaScript Malware Families](./js_malware_detection.html)
