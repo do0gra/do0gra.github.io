@@ -16,6 +16,7 @@ There are two components in the package:
 ## Tools
 
 The following tools were used in the analysis:
+
 | Tool name                  | Purpose                                                                                                                        |
 |:---------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
 | Genymotion                 | Android Emulator that will run the Insecurebankv2                                                                              |
@@ -111,9 +112,13 @@ Using cyberchef, I was able to decrypt the password
 ### Root Detection and Bypass
 
 In the postlogin page, the page shows that the android device is rooted.
+
+
 ![postlogin](/assets/images/test/postlogin.png) 
 
-The code that is responsible for displaying the root status is in the `showRootStatus` method of the PostLogin activity. It displays the rooted message if either `doesSuperuserApkExist` or `doesSUexist`  returns true.
+The code that is responsible for displaying the root status is in the `showRootStatus` method of the PostLogin activity. It displays the rooted message if either `doesSuperuserApkExist` or `doesSUexist` returns true.
+
+
 ![antiroot_1](/assets/images/test/antiroot_1.png) 
 
 
