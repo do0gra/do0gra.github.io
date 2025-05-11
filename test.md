@@ -63,6 +63,7 @@ If the HTTP request returns a valid response, `savecreds()` is called. This will
 ![login_4](/assets/images/test/login_4.png)
 
 On the emulator side, logging in with `devadmin` and a random password `secretp@55w0rd` grants access. The password is not checked here but this password will be used in explaining the vulnerability in the next section.
+
 ![devadmin_login](/assets/images/test/devadmin_login.png) 
 
 ![postlogin](/assets/images/test/postlogin.png) 
@@ -97,9 +98,11 @@ adb pull /data/data/com.android.insecurebankv2/shared_prefs
 ![creds_4](/assets/images/test/creds_4.png) 
 
 Opening `mySharedPreferences.xml` shows the saved base64 encoded username and encrypted base64 encoded password.
+
 ![creds_5](/assets/images/test/creds_5.png) 
 
 Using cyberchef, I was able to decrypt the password
+
 ![creds_6](/assets/images/test/creds_6.png) 
 ![creds_7](/assets/images/test/creds_7.png) 
 
@@ -121,7 +124,7 @@ The methods return true if the following conditions are met:
 
 ![antiroot_2](/assets/images/test/antiroot_2.png) 
 
-I used Frida with the intention to hook the two functions to always return false, using the following python script:
+I used Frida with the intention to hook the two functions to always return false, with the following python script:
 
 ```py
 import frida
