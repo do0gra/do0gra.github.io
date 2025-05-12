@@ -88,7 +88,7 @@ adb connect 192.168.56.102:5555
 adb shell
 ```
 Changing the present working directory to insecurebankv2's folder and listing files, `shared_prefs` appears in the result
-![creds_3](/assets/images/test/creds_3.png) 
+![creds_3](/assets/images/test/creds_3_1.png) 
 
 A little googling reveals that Android stores Shared Preferences settings as XML file in `shared_prefs` folder, as stated [here](https://www.digitalocean.com/community/tutorials/android-shared-preferences-example-tutorial)
 
