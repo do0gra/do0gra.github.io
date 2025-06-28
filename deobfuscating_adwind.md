@@ -41,22 +41,41 @@ Once the strings were deobfuscated, I was able to follow the execution flow more
 
 ## Embedded resources
 
-Several decrypted strings pointed to embedded resources: `/burn.om`, `/snake.green`, and `/dragon.fire`. These were extracted and used to initialize cryptographic materials.
-* `/burn.om` and `/snake.green` were used as `SecretKeySpec` inputs.
-* `/dragon.fire` was used to derive a `PrivateKey`.
+Several decrypted strings pointed to embedded resources: `/burn.om`, `/snake.green`, and `/dragon.fire`. These were extracted and used as explained below:
+* `/dragon.fire` - used as RSA Private key to decrypt `/snake.green`
+* `/snake.green` - is an encrypted AES key
+* `/burn.om` - Encrypted data that would be decrypted by the AES key
 
-![deobf_3](/assets/images/adwind/deobf_3.png)
+```java
+(var2 = (new Cipher.getInstance).??L("RSA")).init(2, (RSAPrivateKey)"/dragon.fire");
+      Object var3 = (new Cipher.getInstance).??L("AES");
+      byte[] var6 = var2.doFinal("/snake.green");
+      SecretKeySpec var7 = new SecretKeySpec(var6, "AES");
+      boolean var10005 = true;
+      var3.init(2, var7);
+      Object var4 = var3.doFinal("/burn.om"); 
+```
 
-![deobf_4](/assets/images/adwind/deobf_4.png)
-
-`privatekey` is used to populate a new object with properties such as:
+The decrypted is then used to initialize a new object `var1000` with the follow strings passed in as arguments to the object's methods.
 * `PRIVATE_PASSWORD`
 * `PASSWORD_CRYPTED`
-* `SERVER_PATH.GETPROPERTY`
+* `SERVER_PATH`
 
 ![deobf_5](/assets/images/adwind/deobf_5.png)
 
-At this stage, the object’s role in the rest of the malware lifecycle remains unclear, as it is no longer referenced.
+The method `loadFromXML` is called on the decrypted result.
+
+```java
+public __j/* $FF was: ??j*/(InputStream var1) throws IOException {
+      super.loadFromXML(var1);
+   }
+```
+
+With a debugger, the XML object contains the following key and value pairs.
+![deobf_4](/assets/images/adwind/deobf_5_2).png)
+
+The values of the keys are extracted and stored into `var8`,`var9` and `var11`.
+![deobf_4](/assets/images/adwind/deobf_5_3).png)
 
 
 ## Additional Embedded JARs and Payload Unpacking
@@ -109,7 +128,6 @@ This analysis highlights Adwind’s multi-layered obfuscation and use of embedde
 
 **Next steps may include:**
 
-- Tracing how the generated `privatekey` is used during execution.
 - Performing full behavioral analysis of the second-stage payload using sandboxing or dynamic tracing.
 - Investigating persistence and communication mechanisms.
 
