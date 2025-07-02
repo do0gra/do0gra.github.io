@@ -107,7 +107,7 @@ And includes Windows Registry interactions:
 ![deobf_10](/assets/images/adwind/deobf_10.png)
 
 
-## Deobfuscating Final Stage Strings
+## Deobfuscating Final Stage Strings and Configuration
 
 While researching the obfuscation technique, I found a [JPCERT/CC blog post](https://blogs.jpcert.or.jp/en/2016/05/decoding-obfuscated-strings-in-adwind.html) describing a similar approach used by Adwind.
 
@@ -121,6 +121,53 @@ Using their tool [`aa-tools`](https://github.com/JPCERTCC/aa-tools), I successfu
 
 The structure confirms the malware's modular nature and use of runtime unpacking, consistent with previously reported Adwind samples.
 
+I also came across a written blog:
+https://www.malwarebytes.com/blog/news/2017/01/from-a-fake-wallet-to-a-java-rat
+
+In the writeup for stage3, the obfuscation technique appears to be the same and similar folder structure with the same interesting files: `Key1.json`, `Key2.json` and `config.json`
+
+The decryption is the same as the previous layer: where `Key1.json` is the RSA private key, `Key2.json` is the AES encrypted key and `config.json` is the AES encrypted config file.
+
+```json
+{
+  "NETWORK": [
+    {
+      "PORT": 1975,
+      "DNS": "212.7.208.143"
+    }
+  ],
+  "INSTALL": true,
+  "MODULE_PATH": "N/waz/XqH.F",
+  "PLUGIN_FOLDER": "OWIkDIPiAnT",
+  "JRE_FOLDER": "EripyZ",
+  "JAR_FOLDER": "NhXrPhGLjBP",
+  "JAR_EXTENSION": "nTBxde",
+  "ENCRYPT_KEY": "eAbPJnPvPODNPmUmFrFvtfYbe",
+  "DELAY_INSTALL": 10,
+  "NICKNAME": "User",
+  "VMWARE": false,
+  "PLUGIN_EXTENSION": "qAaHa",
+  "WEBSITE_PROJECT": "https://jrat.io",
+  "JAR_NAME": "XQwzYcLSbpH",
+  "SECURITY": [
+    {
+      "PROCESS": [
+        "MSASCui.exe",
+        "MsMpEng.exe",
+        "MpUXSrv.exe",
+        "MpCmdRun.exe",
+        "NisSrv.exe",
+        "ConfigSecurityPolicy.exe"
+      ],
+      "NAME": "Windows Defender"
+    }
+  ],
+  "JAR_REGISTRY": "FmQDzPEQFkf",
+  "DELAY_CONNECT": 2,
+  "SECURITY_TIMES": 20,
+  "VBOX": false
+}
+```
 
 ## Conclusion & Next Steps
 
