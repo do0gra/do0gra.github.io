@@ -72,10 +72,10 @@ public __j/* $FF was: ??j*/(InputStream var1) throws IOException {
 ```
 
 With a debugger, the XML object contains the following key and value pairs.
-![deobf_4](/assets/images/adwind/deobf_5_2).png)
+![deobf_5_2](/assets/images/adwind/deobf_5_2).png)
 
 The values of the keys are extracted and stored into `var8`,`var9` and `var11`.
-![deobf_4](/assets/images/adwind/deobf_5_3).png)
+![deobf_5_3](/assets/images/adwind/deobf_5_3).png)
 
 
 ## Additional Embedded JARs and Payload Unpacking
