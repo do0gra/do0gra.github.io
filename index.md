@@ -17,3 +17,7 @@ layout: default
 # Automation
 
 [AST-Based Detection of JavaScript Malware Families](./js_malware_detection.html)
+
+# Techniques
+
+[Malware Techniques](./malware_techniques.html)
