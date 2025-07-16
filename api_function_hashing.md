@@ -92,3 +92,9 @@ For example, the value `0xF9696F1AFB8E4C93` is used directly:
 However, the logic remains consistent: the hash of the DLL name and function name are XOR’ed to match the obfuscated value in the data block.
 
 ![ida_9](/assets/images/api_function_hashing/ida_9.PNG)
+
+## Conclusion
+
+API hashing remains a widely used evasion technique in malware, especially in advanced tooling like Cobalt Strike. By leveraging XORed hash values and indirect resolution via memory-resident data blocks, these loaders can dynamically resolve only the APIs they need, without revealing names in cleartext.
+
+Understanding this technique and its implementation patterns is crucial for analysts when reverse-engineering obfuscated loaders, detecting shellcode behavior, and building effective detection strategies.
