@@ -46,7 +46,7 @@ Summary of Observations
 
 Offset 24 contains another 8-byte value: `0x2B99F27C44B4FCD6`. This value is the XOR of a hashed function name and its corresponding DLL hash, implying that a match indicates a valid function resolution.
 
-![hash_memory_1](/assets/images/hack_cobalt_strike/hash_memory_1.PNG)
+![hash_memory_1](/assets/images/api_function_hashing/hash_memory_1.PNG)
 
 The loop increments `v17` by 40 bytes each iteration, checking values at increasing offsets. The loop continues while the counter `v15` remains below the byte at offset 16, which is `0x1c` (28 in decimal), indicating the number of entries.
 
@@ -54,14 +54,14 @@ The loop increments `v17` by 40 bytes each iteration, checking values at increas
 
 At offset 40, we see the value `0xF8FF396BCC874C38`.
 
-![hash_memory_2](/assets/images/hack_cobalt_strike/hash_memory_2.PNG)
+![hash_memory_2](/assets/images/api_function_hashing/hash_memory_2.PNG)
 
 Drom these observations, we can infer the data block structure:
 - Offset 0 (8 bytes): Constant seed for the hash function
 - Offset 16 (1 byte): Number of function hashes to resolve (`0x1c`)
 - Offset 24 onward (40-byte entries): Each entry holds an obfuscated hash value representing hash(func) XOR hash(dll)
 
-![hash_memory_2](/assets/images/hack_cobalt_strike/hash_memory_2.PNG)
+![hash_memory_2](/assets/images/api_function_hashing/hash_memory_2.PNG)
 
 ## Function Pointer Resolution
 
