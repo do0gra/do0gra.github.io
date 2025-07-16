@@ -18,6 +18,8 @@ layout: default
 
 [AST-Based Detection of JavaScript Malware Families](./js_malware_detection.html)
 
-# Techniques
+# Malware Techniques
 
-[Malware Techniques](./malware_techniques.html)
+[API Function Hashing in a Cobalt Strike Shellcode Loader](./api_function_hashing.html)
+
+[Hack way to extract Cobalt Strike Configuration](./hack_cobalt_strike.html)
